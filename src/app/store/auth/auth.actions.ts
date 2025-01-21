@@ -1,12 +1,12 @@
 export namespace AuthActions {
   export class Login {
     static readonly type = '[Auth] Login';
-    constructor(public payload: { emailId: string; password: string }) {}
+    constructor(public payload: { username: string; password: string }) {}
   }
 
   export class LoginSuccess {
     static readonly type = '[Auth] Login Success';
-    constructor(public payload: { userId: number; emailId: string; token: string; refreshToken: string }) {}
+    constructor(public payload: { username: string; token: string }) {} // Add username
   }
 
   export class LoginFailure {

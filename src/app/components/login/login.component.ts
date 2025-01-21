@@ -4,18 +4,18 @@ import { Store } from '@ngxs/store';
 import { AuthActions } from '../../store/auth/auth.actions';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ FormsModule, AsyncPipe],
+  imports: [ FormsModule, AsyncPipe, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
 
-  emailId = '';
-  password = '';
+  username  = '';
+  password  = '';
   error$: Observable<any>; // Declare as Observable
 
   constructor(private store: Store, private router: Router) {
@@ -25,7 +25,7 @@ export class LoginComponent {
   onSubmit() {
     debugger
     this.store.dispatch(new AuthActions.Login({
-      emailId: this.emailId,
+      username: this.username,
       password: this.password
     })).subscribe(() => {
       debugger

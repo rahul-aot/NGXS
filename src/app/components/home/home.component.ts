@@ -12,12 +12,12 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 })
 export class HomeComponent {
 
-  emailId$: Observable<string | null>; // Declare as Observable
+  username$: Observable<string | null>; // Declare as Observable
   token$: Observable<string | null>; // Declare as Observable
 
   constructor(private store: Store) {
     // Initialize observables in the constructor
-    this.emailId$ = this.store.select(AuthState.emailId);
+    this.username$ = this.store.select(AuthState.username);
     this.token$ = this.store.select(AuthState.token);
   }
 }
