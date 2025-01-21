@@ -7,6 +7,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: { emailId: string; password: string }): Observable<any> {
+    debugger
     return this.http.post('https://projectapi.gerasim.in/api/UserApp/login', credentials);
   }
 }

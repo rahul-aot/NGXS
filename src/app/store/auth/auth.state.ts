@@ -3,6 +3,7 @@ import { AuthActions } from './auth.actions';
 import { AuthService } from './auth.service';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 export interface AuthStateModel {
   userId: number | null;
@@ -24,6 +25,7 @@ export interface AuthStateModel {
     error: null
   }
 })
+@Injectable() // Add this decorator
 export class AuthState {
   constructor(private authService: AuthService) {}
 
