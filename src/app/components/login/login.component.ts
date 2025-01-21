@@ -1,30 +1,35 @@
 import { Component } from '@angular/core';
-import { AuthState } from '../../store/auth.state';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthActions } from '../../store/auth.actions';
+import { AuthActions } from '../../store/auth/auth.actions';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  imports: [ FormsModule, CommonModule],
+  imports: [ FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
 
-
-  $error : boolean false;
-  username = '';
+  emailId = '';
   password = '';
-  error$ = this.store.select(AuthState.error);
+  error$: Observable<any>; // Declare as Observable
 
-  constructor(private store: Store) {}
-
+  constructor(private store: Store, private router: Router) {
+    // Initialize observables in the constructor
+    this.error$ = this.store.select(state => state.auth.error);
+  }
   onSubmit() {
     this.store.dispatch(new AuthActions.Login({
-      username: this.username,
+      emailId: this.emailId,
       password: this.password
-    }));
+    })).subscribe(() => {
+      const isAuthenticated = this.store.selectSnapshot(state => state.auth.token);
+      if (isAuthenticated) {
+        this.router.navigate(['/home']);
+      }
+    });
   }
 }

@@ -3,12 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class AuthService {
   constructor(private http: HttpClient) {}
 
-  getAllUsers(token: string): Observable<any[]> {
-    return this.http.get<any[]>('/api/users', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+  login(credentials: { emailId: string; password: string }): Observable<any> {
+    return this.http.post('https://projectapi.gerasim.in/api/UserApp/login', credentials);
   }
 }

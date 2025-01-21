@@ -5,7 +5,10 @@ import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 export interface AuthStateModel {
+  userId: number | null;
+  emailId: string | null;
   token: string | null;
+  refreshToken: string | null;
   loading: boolean;
   error: any;
 }
@@ -13,7 +16,10 @@ export interface AuthStateModel {
 @State<AuthStateModel>({
   name: 'auth',
   defaults: {
+    userId: null,
+    emailId: null,
     token: null,
+    refreshToken: null,
     loading: false,
     error: null
   }
@@ -26,12 +32,23 @@ export class AuthState {
     return state.token;
   }
 
+  @Selector()
+  static emailId(state: AuthStateModel): string | null {
+    return state.emailId;
+  }
+
+  @Selector()
+  static isAuthenticated(state: AuthStateModel): boolean {
+    return !!state.token;
+  }
+
   @Action(AuthActions.Login)
   login(ctx: StateContext<AuthStateModel>, action: AuthActions.Login) {
     ctx.patchState({ loading: true, error: null });
     return this.authService.login(action.payload).pipe(
-      tap((token: string) => {
-        ctx.dispatch(new AuthActions.LoginSuccess({ token }));
+      tap((response: any) => {
+        const { userId, emailId, token, refreshToken } = response.data;
+        ctx.dispatch(new AuthActions.LoginSuccess({ userId, emailId, token, refreshToken }));
       }),
       catchError(error => {
         ctx.dispatch(new AuthActions.LoginFailure({ error }));
@@ -43,7 +60,10 @@ export class AuthState {
   @Action(AuthActions.LoginSuccess)
   loginSuccess(ctx: StateContext<AuthStateModel>, action: AuthActions.LoginSuccess) {
     ctx.patchState({
+      userId: action.payload.userId,
+      emailId: action.payload.emailId,
       token: action.payload.token,
+      refreshToken: action.payload.refreshToken,
       loading: false,
       error: null
     });
